@@ -115,6 +115,12 @@ import random
 import os
 import shutil
 
+def move(paths, folder):
+    for p in paths:
+        shutil.move(p, folder)
+
+
+
 def split_for_yolo(path, labels='labels/', images='images/'):
     # Get all paths to your images files and text files
     img_paths = glob.glob(path + images + '*.jpg')
@@ -143,10 +149,6 @@ def split_for_yolo(path, labels='labels/', images='images/'):
     valid_folder = PATH+'valid/'
     os.mkdir(train_folder)
     os.mkdir(valid_folder)
-    
-    def move(paths, folder):
-        for p in paths:
-            shutil.move(p, folder)
     
     move(train_img_paths, train_folder)
     move(train_txt_paths, train_folder)
