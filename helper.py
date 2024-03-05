@@ -115,17 +115,13 @@ import random
 import os
 import shutil
 
-def move(paths, folder):
-    for p in paths:
-        shutil.move(p, folder)
-
-
-
 def split_for_yolo(path, labels='labels/', images='images/'):
     # Get all paths to your images files and text files
-    img_paths = glob.glob(path + images + '*.jpg')
+    img_paths = glob.glob(path + images + '*.*')
     txt_paths = glob.glob(path + labels + '*.txt')
     
+    print(path + images + '*.jpg')
+    print(img_paths)
     # Calculate number of files for training, validation
     data_size = len(img_paths)
     r = 0.8
@@ -134,6 +130,7 @@ def split_for_yolo(path, labels='labels/', images='images/'):
     # Shuffle two list
     img_txt = list(zip(img_paths, txt_paths))
     random.seed(43)
+    print(img_txt)
     random.shuffle(img_txt)
     img_paths, txt_paths = zip(*img_txt)
     
@@ -145,12 +142,18 @@ def split_for_yolo(path, labels='labels/', images='images/'):
     valid_txt_paths = txt_paths[train_size:]
     
     # Move them to train, valid folders
-    train_folder = PATH+'train/' 
-    valid_folder = PATH+'valid/'
-    os.mkdir(train_folder)
-    os.mkdir(valid_folder)
+    train_folder = path+'train/' 
+    valid_folder = path+'valid/'
+    os.makedirs(train_folder, exist_ok=True)
+    os.makedirs(valid_folder, exist_ok=True)
+
+    def move(paths, folder):
+      for p in paths:
+          shutil.move(p, folder)
     
     move(train_img_paths, train_folder)
     move(train_txt_paths, train_folder)
     move(valid_img_paths, valid_folder)
     move(valid_txt_paths, valid_folder)
+
+
